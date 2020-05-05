@@ -6,7 +6,7 @@ import gensim
 from gensim.models import Doc2Vec, Word2Vec
 from gensim.models.fasttext import FastText as FT_gensim
 
-from tensorflow.contrib.tensorboard.plugins import projector
+from tensorboard.plugins import projector
 import tensorflow as tf
 
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -141,6 +141,7 @@ class EmbeddingTransformer(BaseEstimator, TransformerMixin):
 
 
 def visualize_in_tensorboard(embedding_model, output_dirname=None, host="127.0.0.1"):
+    tf.compat.v1.disable_eager_execution()
     if output_dirname is None:
         output_dirname =  embedding_model.model_name.split('.')[0]
 
@@ -154,12 +155,12 @@ def visualize_in_tensorboard(embedding_model, output_dirname=None, host="127.0.0
             file_metadata.write(gensim.utils.to_utf8(word) + gensim.utils.to_utf8("\n"))
 
     embedding = tf.Variable(embedding_model.wv.vectors, trainable = False, name = f"{output_dirname}_tensor")
-    init_op = tf.global_variables_initializer()
+    init_op = tf.compat.v1.global_variables_initializer()
 
-    saver = tf.train.Saver()
-    with tf.Session() as sess:
+    saver = tf.compat.v1.train.Saver()
+    with tf.compat.v1.Session() as sess:
         sess.run(init_op)
-        writer = tf.summary.FileWriter(output_path, sess.graph)
+        writer = tf.compat.v1.summary.FileWriter(output_path, sess.graph)
 
     # adding into projector
         config = projector.ProjectorConfig()

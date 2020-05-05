@@ -4,7 +4,7 @@ from skills_ml.algorithms import nlp
 
 from skills_utils.s3 import upload, list_files
 
-from sklearn.externals import joblib
+import joblib
 
 from functools import partial
 from moto import mock_s3

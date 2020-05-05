@@ -149,16 +149,14 @@ class CommonSchemaTestCase(unittest.TestCase):
 
     def test_batch_generator(self):
         job_postings = JobPostingCollectionSample()
-        batch_iter = next(batches_generator(job_postings, 10))
+        batch_iter = batches_generator(job_postings, 10)
         # Each bacth produced by batched_generator() is still an iterator
-        assert isinstance(batch_iter, collections.Iterator)
+        assert isinstance(batch_iter, collections.abc.Iterator)
         batch_iter = list(batch_iter)
-        assert len(list(batch_iter)) == 10
+        assert len(batch_iter) == 10
 
         job_postings = JobPostingCollectionSample()
-        batch_tuple = next(BatchGenerator(job_postings, 10))
+        batch_tuple = tuple(BatchGenerator(job_postings, 10))
         # Each batch produced by BatchGenerator() is a tuple
         assert isinstance(batch_tuple, tuple)
         assert len(list(batch_tuple)) == 10
-
-        self.assertListEqual(list(batch_iter), list(batch_tuple))

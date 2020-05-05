@@ -138,7 +138,7 @@ class DesignMatrix(object):
 
     @property
     def y(self):
-        return np.reshape(np.array(self._y), len(self._y), 1)
+        return np.reshape(np.array(self._y), len(self._y))
 
     @property
     def metadata(self):

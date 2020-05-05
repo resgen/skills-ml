@@ -1,3 +1,7 @@
+"""
+Test skill feature creator
+"""
+# pylint: disable=unused-import, wrong-import-order, missing-function-docstring, missing-class-docstring, line-too-long, invalid-name, unsubscriptable-object
 from skills_ml.algorithms.skill_feature_creator import SequenceFeatureCreator, EmbeddingFeature
 from skills_ml.algorithms.nlp import sentence_tokenize, word_tokenize
 from skills_ml.algorithms.embedding.train import EmbeddingTrainer
@@ -27,7 +31,7 @@ def word_tokenizer_gen(sent_gent):
 class TestSkillFeatureCreator(unittest.TestCase):
 
     def test_skill_feature(self):
-        document_schema_fields = ['description','experienceRequirements', 'qualifications', 'skills']
+        document_schema_fields = ['description', 'experienceRequirements', 'qualifications', 'skills']
         job_postings_generator = JobPostingCollectionSample(num_records=30)
         corpus_generator = Word2VecGensimCorpusCreator(job_postings_generator, document_schema_fields=document_schema_fields, raw=True)
         w2v = Word2VecModel(size=10, min_count=0, iter=4, window=6, workers=3)
@@ -68,7 +72,7 @@ class TestSkillFeatureCreator(unittest.TestCase):
         self.assertEqual(next(fc)[0].shape[0], 17)
 
     def test_embedding_feature(self):
-        document_schema_fields = ['description','experienceRequirements', 'qualifications', 'skills']
+        document_schema_fields = ['description', 'experienceRequirements', 'qualifications', 'skills']
         job_postings_generator = JobPostingCollectionSample(num_records=30)
         corpus_generator = Word2VecGensimCorpusCreator(job_postings_generator, document_schema_fields=document_schema_fields, raw=True)
         w2v = Word2VecModel(size=10, min_count=0, iter=4, window=6, workers=3)
@@ -89,4 +93,3 @@ class TestSkillFeatureCreator(unittest.TestCase):
 
         self.assertEqual(next(fc).shape[0], np.array(next(iter(word_tokenizer_gen(sentence_tokenizer_gen(raw2))))).shape[0])
         self.assertEqual(next(fc)[0].shape[0], 10)
-

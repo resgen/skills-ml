@@ -77,16 +77,25 @@ class EmbeddingTrainer(object):
 
     def _train_batches(self, corpus_generator, n_processes, *args, **kwargs):
         batch_gen = BatchGenerator(corpus_generator, self.batch_size)
+        batch_num = 0
         if n_processes == 1:
-            for i, batch in enumerate(batch_gen):
-                logging.info("Training batch #{} ".format(i))
-                self._models = [self._train_one_batch(model, batch) for model in self._models]
+            try:
+                for batch in batch_gen:
+                    logging.info("Training batch #{} ".format(batch_num))
+                    batch_num += 1
+                    self._models = [self._train_one_batch(model, batch) for model in self._models]
+            except StopIteration:
+                pass
         else:
             with mp.Pool(processes=n_processes) as pool:
-                for i, batch in enumerate(batch_gen):
-                    logging.info("Training batch #{} ".format(i))
-                    partial_train = partial(self._train_one_batch, batch=batch, *args, **kwargs)
-                    self._models = pool.map(partial_train, self._models)
+                try:
+                    for batch in batch_gen:
+                        logging.info("Training batch #{} ".format(batch_num))
+                        batch_num += 1
+                        partial_train = partial(self._train_one_batch, batch=batch, *args, **kwargs)
+                        self._models = pool.map(partial_train, self._models)
+                except StopIteration:
+                    pass
 
     def _train_full_corpus(self, corpus_generator, lookup):
         logging.info(f"Training {self.model_type}")

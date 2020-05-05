@@ -15,7 +15,7 @@ import unittest
 import mock
 from descriptors import cachedproperty
 from functools import partial
-from sklearn.externals import joblib
+import joblib
 
 
 grid = {

@@ -172,9 +172,15 @@ def batches_generator(iterable, batch_size):
         batch_size: batch size
     """
     sourceiter = iter(iterable)
-    while True:
-        batchiter = islice(sourceiter, batch_size)
-        yield chain([next(batchiter)], batchiter)
+    batches = None
+    #while True:
+    for batch in islice(sourceiter, batch_size):
+        #batchiter = islice(sourceiter, batch_size)
+        if not batches:
+            batches = iter([batch])
+        else:
+            batches = chain([batch], batches)
+        yield batches
 
 
 class BatchGenerator(object):

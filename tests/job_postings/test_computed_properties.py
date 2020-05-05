@@ -63,7 +63,7 @@ class ComputedPropertyTestCase(unittest.TestCase):
 
                     # assuming here that the first arg will be a configurable number,
                     # e.g. top 'n'
-                    if len(inspect.getargspec(base_func).args) == 2:
+                    if len(inspect.getfullargspec(base_func).args) == 2:
                         yield functools.partial(func, 2)
                     else:
                         yield func

@@ -46,4 +46,4 @@ def itershuffle(iterable, bufsize=1000):
         random.shuffle(buf)
         while buf:
             yield buf.pop()
-        raise StopIteration
+        #raise StopIteration
